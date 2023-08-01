@@ -1,12 +1,15 @@
-name: tfsec
+name: MSDO windows-latest
 on:
   push:
     branches:
       - main
   pull_request:
- 
+    branches:
+      - main
 jobs:
   sample:
+  # MSDO runs on windows-latest and ubuntu-latest.
+  # macos-latest supporting coming soon
     runs-on: windows-latest
     permissions:
       actions: read
@@ -15,8 +18,14 @@ jobs:
     steps:
       - name: Clone repo
         uses: actions/checkout@v3
+#         with:
+#           persist-credentials: false
+          
+      - uses: actions/setup-dotnet@v3
         with:
-          persist-credentials: false
+          dotnet-version: |
+            5.0.x
+            6.0.x
 
       - name: Run Microsoft Security DevOps Analysis
         uses: microsoft/security-devops-action@preview
