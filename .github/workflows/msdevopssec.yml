@@ -4,9 +4,9 @@ on:
     branches:
       - main
   pull_request:
+ 
 jobs:
-  tfsec:
-    name: tfsec sarif report
+  sample:
     runs-on: windows-latest
     permissions:
       actions: read
@@ -14,11 +14,16 @@ jobs:
       security-events: write
     steps:
       - name: Clone repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           persist-credentials: false
 
-
+      - name: Run Microsoft Security DevOps Analysis
+        uses: microsoft/security-devops-action@preview
+        id: msdo
+        with:
+          sarif_file: ${{ steps.msdo.outputs.sarifFile }}
+          
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v2
         with:
