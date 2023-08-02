@@ -38,10 +38,14 @@ jobs:
         dotnet-version: |
           5.0.x
           6.0.x
-    - name: Run Microsoft Security DevOps
-      uses: microsoft/security-devops-action@v1.6.0
+    - name: Run Microsoft Security DevOps Analysis
       id: msdo
-    - name: Upload results to Security tab
+      uses: microsoft/security-devops-action@preview
+      with:
+          categories: 'vulnerabilities'
+          
+    - name: Upload SARIF file
       uses: github/codeql-action/upload-sarif@v2
       with:
-        sarif_file: ${{ steps.msdo.outputs.sarifFile }}
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: ${{ steps.msdo.outputs.sarifFile }}
